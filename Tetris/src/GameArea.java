@@ -172,7 +172,7 @@ public class GameArea extends JPanel {
             }
         }
 
-        if(linesCleared % 10 == 0){
+        if((linesCleared + 1) % 10 == 0){
             level++;
             speed = Math.max(100, this.speed - 50);
             timer.setDelay(speed);

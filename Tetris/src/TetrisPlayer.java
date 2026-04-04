@@ -15,7 +15,7 @@ public class TetrisPlayer {
         frame.add(gameArea, BorderLayout.CENTER);
         frame.add(statusLabel, BorderLayout.SOUTH);
 
-        frame.setSize(800, 900); // slightly taller for label
+        frame.setSize(450, 700); // slightly taller for label
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setResizable(false);
         frame.setVisible(true);
