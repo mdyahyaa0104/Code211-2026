@@ -10,7 +10,7 @@ public class GameArea extends JPanel {
     int cellSize = 30;
 
     Color[][] board = new Color[rows][cols];
-    TetrisBlocks currentBlock = new TetrisBlocks();
+    TetrisBlocks currentBlock = new TetrisBlocks(); 
 
     Timer timer;
     public GameArea() {
