@@ -3,18 +3,24 @@ import java.awt.Graphics;
 import java.awt.Color;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import javax.swing.JLabel;
+
 
 public class GameArea extends JPanel {
-    int rows = 20;
-    int cols = 10;
-    int cellSize = 30;
+    int rows = 20, cols = 10, cellSize = 30;
+    int points = 0, level = 1;
+    int speed = 500;
+    private JLabel statusLabel; // store reference
+
 
     Color[][] board = new Color[rows][cols];
     TetrisBlocks currentBlock = new TetrisBlocks();
 
     Timer timer;
-    public GameArea() {
-        timer = new Timer(500, new ActionListener() {
+    public GameArea(JLabel statusLabel) {
+
+        this.statusLabel = statusLabel;
+        timer = new Timer(speed, new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 update();
                 repaint();
@@ -103,6 +109,11 @@ public class GameArea extends JPanel {
         }
     }
 
+    private void updateScore() {
+        points += ((linesCleared * level) * 100);
+        statusLabel.setText("Points: " + points);
+    }
+
     // stop block move
     private void lockBlock() {
         int[][] shape = currentBlock.getCurrentShape();
@@ -118,12 +129,13 @@ public class GameArea extends JPanel {
                 }
             }
         }
-
-        clearLines();
+        updateScore();
     }
 
-    public int clearLines() {
-        int linesCleared = 0;
+
+    int linesCleared = 0;
+
+    public void clearLines() {
 
         for(int r = rows-1; r >= 0; r--){
             boolean fullLine = true;
@@ -137,10 +149,16 @@ public class GameArea extends JPanel {
             if(fullLine){
                 clearLine(r);
                 linesCleared++;
+                r++;
             }
-        }
 
-        return linesCleared;
+            if(linesCleared % 10 == 0){
+                level++;
+                speed = Math.max(100, this.speed - 50);
+                timer.setDelay(speed);
+            }
+
+        }
     }
 
     public void clearLine(int rowIndex) {

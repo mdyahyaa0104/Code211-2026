@@ -4,10 +4,10 @@ import java.awt.*;
 public class TetrisPlayer {
     public static void main(String[] args) {
         JFrame frame = new JFrame("Tetris");
-        GameArea gameArea = new GameArea();
+        JLabel statusLabel = new JLabel("Points: 0");
+        GameArea gameArea = new GameArea(statusLabel);
 
         // Create a label for points or messages
-        JLabel statusLabel = new JLabel("Points: 0");
         statusLabel.setHorizontalAlignment(SwingConstants.CENTER);
 
         // Layout: Game area on top, label below
