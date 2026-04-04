@@ -4,7 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="af0244ac-f0c3-4386-a865-06fe8a79278e" name="Changes" comment="" />
+    <list default="true" id="af0244ac-f0c3-4386-a865-06fe8a79278e" name="Changes" comment="bug fixes">
+      <change beforePath="$PROJECT_DIR$/src/TetrisPlayer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/TetrisPlayer.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -79,9 +81,22 @@
       <workItem from="1775332872441" duration="9000" />
       <workItem from="1775332910680" duration="109000" />
     </task>
+    <task id="LOCAL-00001" summary="bug fixes">
+      <option name="closed" value="true" />
+      <created>1775334236266</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1775334236266</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="bug fixes" />
+    <option name="LAST_COMMIT_MESSAGE" value="bug fixes" />
   </component>
 </project>

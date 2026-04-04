@@ -26,7 +26,7 @@ public class TetrisPlayer {
         Timer pointTimer = new Timer(1000, e -> {
             // Just increment points for demo
             int points = Integer.parseInt(statusLabel.getText().replaceAll("\\D", "")) + 10;
-            statusLabel.setText("Points: " + points);
+            statusLabel.setText("Points: " + points );
         });
         pointTimer.start();
     }
