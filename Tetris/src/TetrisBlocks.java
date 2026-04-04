@@ -1,11 +1,42 @@
 import java.awt.*;
 
 public class TetrisBlocks {
-    private int x, y; // Current grid position
-    private int[][] shape; // 2D array representing the piece
-    private Color color;
+    int[][] O = {
+            {1, 1},
+            {1, 1}
+    };
 
-    public void moveDown() {
-        y++; // Increment Y to move the block down the grid
-    }
+    int[][] I = {
+            {1},
+            {1},
+            {1},
+            {1}
+    };
+
+    int[][] S = {
+            {0, 1, 1},
+            {1, 1, 0}
+    };
+
+    int[][] Z = {
+            {1, 1, 0},
+            {0, 1, 1}
+    };
+
+    int[][] L = {
+            {1, 0},
+            {1, 0},
+            {1, 1}
+    };
+
+    int[][] J = {
+            {0, 1},
+            {0, 1},
+            {1, 1}
+    };
+
+    int[][] T = {
+            {1, 1, 1},
+            {0, 1, 0}
+    };
 }
