@@ -47,7 +47,7 @@ public class TetrisBlocks {
 
     public TetrisBlocks(){
         Random rand = new Random();
-        int randIndex = rand.nextInt(8);
+        int randIndex = rand.nextInt(7);
         currentShape = shapesList[randIndex];
     }
 
@@ -57,6 +57,10 @@ public class TetrisBlocks {
 
     public void setCurrentShape(int[][] currentShape) {
         this.currentShape = currentShape;
+    }
+
+    public int getBlockHeight(){
+        return currentShape.length;
     }
 
     public int getX() {

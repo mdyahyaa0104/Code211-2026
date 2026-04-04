@@ -24,11 +24,41 @@ public class GameArea extends JPanel {
     }
 
     private void update() {
-        currentBlock.y--;
 
         // simple floor collision
-        if (currentBlock.y + currentBlock.currentShape.length < 0) {
-            currentBlock.y = 0; // reset for now
+        currentBlock.setY(currentBlock.getY()+1); // fall down
+
+        // floor collision
+        if (currentBlock.getY() + currentBlock.getBlockHeight() >= rows) {
+            // lock block into board
+            lockBlock();
+            // spawn new block
+            currentBlock = new TetrisBlocks();
+        }
+
+
+        // simple wall collision
+        if(currentBlock.getX() < 1){
+            currentBlock.setX(1);
+        }
+        if(currentBlock.getX() > cols){
+            currentBlock.setX(cols);
+        }
+    }
+
+    private void lockBlock() {
+        int[][] shape = currentBlock.getCurrentShape();
+
+        for (int r = 0; r < shape.length; r++) {
+            for (int c = 0; c < shape[r].length; c++) {
+                if (shape[r][c] == 1) {
+                    int boardRow = currentBlock.getY() + r;
+                    int boardCol = currentBlock.getX() + c;
+                    if (boardRow >= 0 && boardRow < rows && boardCol >= 0 && boardCol < cols) {
+                        board[boardRow][boardCol] = 1;
+                    }
+                }
+            }
         }
     }
 
@@ -43,6 +73,21 @@ public class GameArea extends JPanel {
         }
         for (int c = 0; c <= cols; c++) {
             g.drawLine(c * cellSize, 0, c * cellSize, rows * cellSize);
+        }
+
+        int[][] shape = currentBlock.getCurrentShape();
+
+        g.setColor(Color.GREEN);
+
+        for (int r = 0; r < shape.length; r++) {
+            for (int c = 0; c < shape[r].length; c++) {
+                if (shape[r][c] == 1) {
+                    int x = (currentBlock.getX() + c) * cellSize;
+                    int y = (currentBlock.getY() + r) * cellSize;
+
+                    g.fillRect(x, y, cellSize, cellSize);
+                }
+            }
         }
     }
 }
