@@ -10,7 +10,7 @@ public class GameArea extends JPanel {
     int cols = 10;
     int cellSize = 30;
 
-    int[][] board = new int[rows][cols];
+    Color[][] board = new Color[rows][cols];
     TetrisBlocks currentBlock = new TetrisBlocks();
 
     Timer timer;
@@ -41,7 +41,7 @@ public class GameArea extends JPanel {
 
                     if (nextRow >= rows) return true;
 
-                    if (board[nextRow][col] == 1) return true;
+                    if (board[nextRow][col] != null) return true;
                 }
             }
         }
@@ -81,7 +81,7 @@ public class GameArea extends JPanel {
                     int boardRow = currentBlock.getY() + r;
                     int boardCol = currentBlock.getX() + c;
                     if (boardRow < rows && boardCol < cols) {
-                        board[boardRow][boardCol] = 1;
+                        board[boardRow][boardCol] = currentBlock.getColor();
                     }
                 }
             }
@@ -96,7 +96,7 @@ public class GameArea extends JPanel {
                 if (shape[r][c] == 1) {
                     int boardRow = block.getY() + r;
                     int boardCol = block.getX() + c;
-                    if (boardRow < rows && board[boardRow][boardCol] == 1) {
+                    if (boardRow < rows && board[boardRow][boardCol] != null) {
                         return true; // collision detected
                     }
                 }
@@ -119,10 +119,9 @@ public class GameArea extends JPanel {
         }
 
         // draw locked blocks
-        g.setColor(Color.BLUE);
         for (int r = 0; r < rows; r++) {
             for (int c = 0; c < cols; c++) {
-                if (board[r][c] == 1) {
+                if (board[r][c] != null) {
                     g.fillRect(c * cellSize, r * cellSize, cellSize, cellSize);
                 }
             }
@@ -130,7 +129,7 @@ public class GameArea extends JPanel {
 
         // draw current falling block
         int[][] shape = currentBlock.getCurrentShape();
-        g.setColor(Color.GREEN);
+        g.setColor(currentBlock.getColor());
         for (int r = 0; r < shape.length; r++) {
             for (int c = 0; c < shape[r].length; c++) {
                 if (shape[r][c] == 1) {

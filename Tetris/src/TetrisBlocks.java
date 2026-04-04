@@ -92,10 +92,23 @@ public class TetrisBlocks {
     private int[][] currentShape;
     private int x = 3, y = 0;
 
+    private Color color;
+    private Color[] colors = {
+            color.GREEN,
+            color.RED,
+            color.YELLOW,
+            color.ORANGE,
+            color.BLUE,
+            color.PINK,
+            color.MAGENTA
+    };
+
     public TetrisBlocks(){
         Random rand = new Random();
         int randIndex = rand.nextInt(7);
         currentShape = shapesList[randIndex];
+
+        color = colors[randIndex];
     }
 
     public int[][] getCurrentShape() {
@@ -130,4 +143,7 @@ public class TetrisBlocks {
         this.y = y;
     }
 
+    public Color getColor() {
+        return color;
+    }
 }
