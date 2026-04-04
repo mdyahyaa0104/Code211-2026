@@ -51,4 +51,16 @@ public class TetrisBlocks {
         int randIndex = rand.nextInt(8);
         currentShape = shapesList[randIndex];
     }
+
+    public int[][] getCurrentShape() {
+        return currentShape;
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
+    }
 }
