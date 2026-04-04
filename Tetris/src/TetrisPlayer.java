@@ -4,7 +4,7 @@ import java.awt.*;
 public class TetrisPlayer {
     public static void main(String[] args) {
         JFrame frame = new JFrame("Tetris");
-        JLabel statusLabel = new JLabel("Points: 0");
+        JLabel statusLabel = new JLabel("Points: 0 | Level: 1");
         GameArea gameArea = new GameArea(statusLabel);
 
         // Create a label for points or messages
@@ -21,13 +21,5 @@ public class TetrisPlayer {
         frame.setVisible(true);
         frame.setFocusable(true);
         frame.requestFocusInWindow();
-
-        // Example of updating the label
-        Timer pointTimer = new Timer(1000, e -> {
-            // Just increment points for demo
-            int points = Integer.parseInt(statusLabel.getText().replaceAll("\\D", "")) + 10;
-            statusLabel.setText("Points: " + points );
-        });
-        pointTimer.start();
     }
 }

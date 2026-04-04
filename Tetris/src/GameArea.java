@@ -20,6 +20,7 @@ public class GameArea extends JPanel {
     public GameArea(JLabel statusLabel) {
 
         this.statusLabel = statusLabel;
+
         timer = new Timer(speed, new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 update();
@@ -69,7 +70,15 @@ public class GameArea extends JPanel {
         getActionMap().put("rotateBlock", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                currentBlock.setCurrentShape(rotateClockwise(currentBlock.getCurrentShape()));
+                int[][] oldShape = currentBlock.getCurrentShape();
+                int[][] rotated = rotateClockwise(oldShape);
+
+                currentBlock.setCurrentShape(rotated);
+
+                if (isOutOfBounds(currentBlock) || checkCollision(currentBlock)) {
+                    currentBlock.setCurrentShape(oldShape); // undo rotation
+                }
+
                 repaint();
             }
         });
@@ -111,7 +120,16 @@ public class GameArea extends JPanel {
 
     private void updateScore() {
         points += ((linesCleared * level) * 100);
-        statusLabel.setText("Points: " + points);
+        statusLabel.setText("Points: " + points + " | Level: " + level);
+    }
+
+    private void gameOver() {
+        System.out.println("GAME OVER!");
+
+        getInputMap(JPanel.WHEN_IN_FOCUSED_WINDOW).clear();
+        getActionMap().clear();
+        timer.stop();
+        repaint();
     }
 
     // stop block move
@@ -187,14 +205,6 @@ public class GameArea extends JPanel {
         }
     }
 
-    private void gameOver() {
-        System.out.println("GAME OVER!");
-
-        getInputMap(JPanel.WHEN_IN_FOCUSED_WINDOW).clear();
-        getActionMap().clear();
-        timer.stop();
-        repaint();
-    }
 
     public int[][] rotateClockwise(int[][] matrix) {
         int rows = matrix.length;
@@ -208,6 +218,24 @@ public class GameArea extends JPanel {
         }
 
         return rotated;
+    }
+
+    private boolean isOutOfBounds(TetrisBlocks block) {
+        int[][] shape = block.getCurrentShape();
+
+        for (int r = 0; r < shape.length; r++) {
+            for (int c = 0; c < shape[r].length; c++) {
+                if (shape[r][c] == 1) {
+                    int x = block.getX() + c;
+                    int y = block.getY() + r;
+
+                    if (x < 0 || x >= cols || y >= rows) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
     }
 
     private boolean isCollisionBelow(TetrisBlocks block) {
