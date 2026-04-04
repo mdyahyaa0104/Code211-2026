@@ -6,7 +6,7 @@ public class TetrisPlayer {
         GameArea gameArea = new GameArea();
 
         frame.add(gameArea);
-        frame.setSize(800, 800);
+        frame.setSize(400, 800);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setResizable(false);
         frame.setVisible(true);

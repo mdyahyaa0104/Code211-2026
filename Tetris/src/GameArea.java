@@ -44,7 +44,17 @@ public class GameArea extends JPanel {
         getActionMap().put("moveDown", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                currentBlock.setY(currentBlock.getY() + 1);
+                if (currentBlock.getY() + currentBlock.getBlockHeight() < rows && !isCollisionBelow(currentBlock)) {
+                    currentBlock.setY(currentBlock.getY() + 1);
+                } else {
+                    lockBlock();
+                    spawnNewBlock();
+                }
+
+                if(currentBlock.getY() + currentBlock.getBlockHeight() > rows){
+                    currentBlock.setY(currentBlock.getY() - 1);
+                }
+
                 repaint();
             }
         });
@@ -91,6 +101,10 @@ public class GameArea extends JPanel {
             spawnNewBlock();
         }
 
+        if(currentBlock.getY() + currentBlock.getBlockHeight() > rows){
+            currentBlock.setY(currentBlock.getY() - 1);
+        }
+
         // wall collision
         if (currentBlock.getX() < 0) currentBlock.setX(0);
         if (currentBlock.getX() + currentBlock.getBlockWidth() > cols)
@@ -128,7 +142,7 @@ public class GameArea extends JPanel {
         }
     }
 
-    // This checls whenfsd the blcosk collides with other blcisls
+    // Block-to-Block Collision Check
     private boolean checkCollision(TetrisBlocks block) {
         int[][] shape = block.getCurrentShape();
         for (int r = 0; r < shape.length; r++) {
