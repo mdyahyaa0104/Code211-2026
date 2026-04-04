@@ -1,16 +1,33 @@
-import javax.swing.JFrame;
+import javax.swing.*;
+import java.awt.*;
 
 public class TetrisPlayer {
     public static void main(String[] args) {
         JFrame frame = new JFrame("Tetris");
         GameArea gameArea = new GameArea();
 
-        frame.add(gameArea);
-        frame.setSize(400, 800);
+        // Create a label for points or messages
+        JLabel statusLabel = new JLabel("Points: 0");
+        statusLabel.setHorizontalAlignment(SwingConstants.CENTER);
+
+        // Layout: Game area on top, label below
+        frame.setLayout(new BorderLayout());
+        frame.add(gameArea, BorderLayout.CENTER);
+        frame.add(statusLabel, BorderLayout.SOUTH);
+
+        frame.setSize(800, 900); // slightly taller for label
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setResizable(false);
         frame.setVisible(true);
         frame.setFocusable(true);
         frame.requestFocusInWindow();
+
+        // Example of updating the label
+        Timer pointTimer = new Timer(1000, e -> {
+            // Just increment points for demo
+            int points = Integer.parseInt(statusLabel.getText().replaceAll("\\D", "")) + 10;
+            statusLabel.setText("Points: " + points);
+        });
+        pointTimer.start();
     }
 }

@@ -66,8 +66,8 @@ public class GameArea extends JPanel {
                 repaint();
             }
         });
-    }
 
+<<<<<<< HEAD
     private void gameOver() throws InterruptedException {
         System.out.println("GAME OVER!");
         timer.stop();
@@ -97,6 +97,16 @@ public class GameArea extends JPanel {
         if (checkCollision(currentBlock)) {
             gameOver(); // trigger game over
         }
+=======
+        getInputMap(JPanel.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("R"), "rotateBlock");
+        getActionMap().put("rotateBlock", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                currentBlock.setCurrentShape(rotateClockwise(currentBlock.getCurrentShape()));
+                repaint();
+            }
+        });
+>>>>>>> b6d4f5c7ba132dd6ad081aaf65675e53f9e2f8a4
     }
 
     private void update() throws InterruptedException {
@@ -148,6 +158,95 @@ public class GameArea extends JPanel {
                 }
             }
         }
+
+        clearLines();
+    }
+
+    public int clearLines() {
+        int linesCleared = 0;
+
+        for(int r = rows-1; r >= 0; r--){
+            boolean fullLine = true;
+
+            for(int c = 0; c < cols; c++){
+                if(board[r][c] == null){
+                    fullLine = false;
+                }
+            }
+
+            if(fullLine){
+                clearLine(r);
+                linesCleared++;
+            }
+        }
+
+        return linesCleared;
+    }
+
+    public void clearLine(int rowIndex) {
+        // Clear the row first
+        for (int c = 0; c < cols; c++) {
+            board[rowIndex][c] = null; // empty cell
+        }
+
+        // Shift rows above down
+        for (int r = rowIndex; r >= 1; r--) {
+            for (int c = 0; c < cols; c++) {
+                board[r][c] = board[r - 1][c];
+            }
+        }
+
+        // Clear the top row
+        for (int c = 0; c < cols; c++) {
+            board[0][c] = null;
+        }
+    }
+
+    private void spawnNewBlock() {
+        currentBlock = new TetrisBlocks();
+        if (checkCollision(currentBlock)) {
+            gameOver(); // trigger game over
+        }
+    }
+
+    private void gameOver() {
+        System.out.println("GAME OVER!");
+
+        getInputMap(JPanel.WHEN_IN_FOCUSED_WINDOW).clear();
+        getActionMap().clear();
+        timer.stop();
+        repaint();
+    }
+
+    public int[][] rotateClockwise(int[][] matrix) {
+        int rows = matrix.length;
+        int cols = matrix[0].length;
+        int[][] rotated = new int[cols][rows]; // notice swapped dimensions
+
+        for (int r = 0; r < rows; r++) {
+            for (int c = 0; c < cols; c++) {
+                rotated[c][rows - 1 - r] = matrix[r][c];
+            }
+        }
+
+        return rotated;
+    }
+
+    private boolean isCollisionBelow(TetrisBlocks block) {
+        int[][] shape = block.getCurrentShape();
+        for (int r = 0; r < shape.length; r++) {
+            for (int c = 0; c < shape[r].length; c++) {
+                if (shape[r][c] == 1) {
+                    int nextRow = block.getY() + r + 1;
+                    int col = block.getX() + c;
+
+                    if (nextRow >= rows) return true;
+
+                    if (board[nextRow][col] != null) return true;
+                }
+            }
+        }
+        return false;
     }
 
     // Block-to-Block Collision Check
