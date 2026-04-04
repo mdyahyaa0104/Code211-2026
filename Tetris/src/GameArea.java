@@ -39,6 +39,15 @@ public class GameArea extends JPanel {
                 repaint();
             }
         });
+
+        getInputMap(JPanel.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("DOWN"), "moveDown");
+        getActionMap().put("moveDown", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                currentBlock.setY(currentBlock.getY() + 1);
+                repaint();
+            }
+        });
     }
 
     private void gameOver() {
