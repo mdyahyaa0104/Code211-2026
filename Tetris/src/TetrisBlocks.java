@@ -90,7 +90,7 @@ public class TetrisBlocks {
 
     private int[][][] shapesList = {O,I,S,Z,L,J,T};
     private int[][] currentShape;
-    private int x = 4, y = 0;
+    private int x = 3, y = 0;
 
     public TetrisBlocks(){
         Random rand = new Random();
@@ -108,6 +108,10 @@ public class TetrisBlocks {
 
     public int getBlockHeight(){
         return currentShape.length;
+    }
+
+    public int getBlockWidth(){
+        return currentShape[0].length;
     }
 
     public int getX() {

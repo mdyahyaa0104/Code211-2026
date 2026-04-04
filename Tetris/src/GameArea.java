@@ -23,29 +23,55 @@ public class GameArea extends JPanel {
         timer.start();
     }
 
-    private void update() {
+    private boolean isCollisionBelow(TetrisBlocks block) {
+        int[][] shape = block.getCurrentShape();
+        for (int r = 0; r < shape.length; r++) {
+            for (int c = 0; c < shape[r].length; c++) {
+                if (shape[r][c] == 1) {
+                    int nextRow = block.getY() + r + 1;
+                    int col = block.getX() + c;
 
-        // simple floor collision
-        currentBlock.setY(currentBlock.getY()+1); // fall down
+                    // check floor
+                    if (nextRow >= rows) return true;
 
-        // floor collision
-        if (currentBlock.getY() + currentBlock.getBlockHeight() >= rows) {
-            // lock block into board
-            lockBlock();
-            // spawn new block
-            currentBlock = new TetrisBlocks();
+                    // check if the cell below is already occupied
+                    if (board[nextRow][col] == 1) return true;
+                }
+            }
         }
-
-
-        // simple wall collision
-        if(currentBlock.getX() < 1){
-            currentBlock.setX(1);
-        }
-        if(currentBlock.getX() > cols){
-            currentBlock.setX(cols);
-        }
+        return false;
     }
 
+    private void update() {
+        // calculate bottom of the block
+        int bottomY = currentBlock.getY() + currentBlock.getBlockHeight();
+
+        // check if block can move down without hitting floor or another block
+        if (bottomY < rows && !isCollisionBelow(currentBlock)) {
+            currentBlock.setY(currentBlock.getY() + 1); // move down
+        } else {
+            // this stops blocks
+            lockBlock();
+
+            //spawns in new blcok
+            currentBlock = new TetrisBlocks();
+
+
+            if (checkCollision(currentBlock)) {
+                System.out.println("Game Over");
+
+            }
+
+            return;
+        }
+
+        // wall collision
+        if (currentBlock.getX() < 0) currentBlock.setX(0);
+        if (currentBlock.getX() + currentBlock.getBlockWidth() > cols)
+            currentBlock.setX(cols - currentBlock.getBlockWidth());
+    }
+
+    // stop block move
     private void lockBlock() {
         int[][] shape = currentBlock.getCurrentShape();
 
@@ -54,12 +80,29 @@ public class GameArea extends JPanel {
                 if (shape[r][c] == 1) {
                     int boardRow = currentBlock.getY() + r;
                     int boardCol = currentBlock.getX() + c;
-                    if (boardRow >= 0 && boardRow < rows && boardCol >= 0 && boardCol < cols) {
+                    if (boardRow < rows && boardCol < cols) {
                         board[boardRow][boardCol] = 1;
                     }
                 }
             }
         }
+    }
+
+    // This checls whenfsd the blcosk collides with other blcisls
+    private boolean checkCollision(TetrisBlocks block) {
+        int[][] shape = block.getCurrentShape();
+        for (int r = 0; r < shape.length; r++) {
+            for (int c = 0; c < shape[r].length; c++) {
+                if (shape[r][c] == 1) {
+                    int boardRow = block.getY() + r;
+                    int boardCol = block.getX() + c;
+                    if (boardRow < rows && board[boardRow][boardCol] == 1) {
+                        return true; // collision detected
+                    }
+                }
+            }
+        }
+        return false;
     }
 
     @Override
@@ -75,16 +118,24 @@ public class GameArea extends JPanel {
             g.drawLine(c * cellSize, 0, c * cellSize, rows * cellSize);
         }
 
+        // draw locked blocks
+        g.setColor(Color.BLUE);
+        for (int r = 0; r < rows; r++) {
+            for (int c = 0; c < cols; c++) {
+                if (board[r][c] == 1) {
+                    g.fillRect(c * cellSize, r * cellSize, cellSize, cellSize);
+                }
+            }
+        }
+
+        // draw current falling block
         int[][] shape = currentBlock.getCurrentShape();
-
         g.setColor(Color.GREEN);
-
         for (int r = 0; r < shape.length; r++) {
             for (int c = 0; c < shape[r].length; c++) {
                 if (shape[r][c] == 1) {
                     int x = (currentBlock.getX() + c) * cellSize;
                     int y = (currentBlock.getY() + r) * cellSize;
-
                     g.fillRect(x, y, cellSize, cellSize);
                 }
             }
