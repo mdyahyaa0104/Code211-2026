@@ -47,6 +47,7 @@
   <component name="RunManager">
     <configuration name="TetrisPlayer" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="TetrisPlayer" />
+      <module name="Tetris" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>

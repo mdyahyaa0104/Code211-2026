@@ -129,6 +129,7 @@ public class GameArea extends JPanel {
                 }
             }
         }
+        clearLines();
         updateScore();
     }
 
