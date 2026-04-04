@@ -1,4 +1,5 @@
 import java.awt.*;
+import java.util.Random;
 
 public class TetrisBlocks {
     int[][] O = {
@@ -39,4 +40,15 @@ public class TetrisBlocks {
             {1, 1, 1},
             {0, 1, 0}
     };
+
+    int[][][] shapesList = {O,I,S,Z,L,J,T};
+    int[][] currentShape;
+    int x = 4;
+    int y = 0;
+
+    public TetrisBlocks(){
+        Random rand = new Random();
+        int randIndex = rand.nextInt(8);
+        currentShape = shapesList[randIndex];
+    }
 }
