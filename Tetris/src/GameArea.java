@@ -16,7 +16,11 @@ public class GameArea extends JPanel {
     public GameArea() {
         timer = new Timer(500, new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                update();
+                try {
+                    update();
+                } catch (InterruptedException ex) {
+                    throw new RuntimeException(ex);
+                }
                 repaint();
             }
         });
@@ -48,7 +52,11 @@ public class GameArea extends JPanel {
                     currentBlock.setY(currentBlock.getY() + 1);
                 } else {
                     lockBlock();
-                    spawnNewBlock();
+                    try {
+                        spawnNewBlock();
+                    } catch (InterruptedException ex) {
+                        throw new RuntimeException(ex);
+                    }
                 }
 
                 if(currentBlock.getY() + currentBlock.getBlockHeight() > rows){
@@ -60,11 +68,11 @@ public class GameArea extends JPanel {
         });
     }
 
-    private void gameOver() {
+    private void gameOver() throws InterruptedException {
         System.out.println("GAME OVER!");
         timer.stop();
 
-        repaint();
+        Thread.sleep(1000000);
     }
 
     private boolean isCollisionBelow(TetrisBlocks block) {
@@ -84,14 +92,14 @@ public class GameArea extends JPanel {
         return false;
     }
 
-    private void spawnNewBlock() {
+    private void spawnNewBlock() throws InterruptedException {
         currentBlock = new TetrisBlocks();
         if (checkCollision(currentBlock)) {
             gameOver(); // trigger game over
         }
     }
 
-    private void update() {
+    private void update() throws InterruptedException {
         if (currentBlock == null) return; // stop updating if game over
 
         if (currentBlock.getY() + currentBlock.getBlockHeight() < rows && !isCollisionBelow(currentBlock)) {
