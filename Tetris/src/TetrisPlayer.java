@@ -10,5 +10,7 @@ public class TetrisPlayer {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setResizable(false);
         frame.setVisible(true);
+        frame.setFocusable(true);
+        frame.requestFocusInWindow();
     }
 }

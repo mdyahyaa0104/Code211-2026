@@ -1,7 +1,6 @@
-import javax.swing.JPanel;
+import javax.swing.*;
 import java.awt.Graphics;
 import java.awt.Color;
-import javax.swing.Timer;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
@@ -22,6 +21,24 @@ public class GameArea extends JPanel {
             }
         });
         timer.start();
+
+        getInputMap(JPanel.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("LEFT"), "moveLeft");
+        getActionMap().put("moveLeft", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                moveLeft();
+                repaint();
+            }
+        });
+
+        getInputMap(JPanel.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("RIGHT"), "moveRight");
+        getActionMap().put("moveRight", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                moveRight();
+                repaint();
+            }
+        });
     }
 
     private void gameOver() {
@@ -69,6 +86,20 @@ public class GameArea extends JPanel {
         if (currentBlock.getX() < 0) currentBlock.setX(0);
         if (currentBlock.getX() + currentBlock.getBlockWidth() > cols)
             currentBlock.setX(cols - currentBlock.getBlockWidth());
+    }
+
+    public void moveLeft() {
+        currentBlock.setX(currentBlock.getX() - 1);
+        if (currentBlock.getX() < 0 || checkCollision(currentBlock)) {
+            currentBlock.setX(currentBlock.getX() + 1); // undo if invalid
+        }
+    }
+
+    public void moveRight() {
+        currentBlock.setX(currentBlock.getX() + 1);
+        if (currentBlock.getX() + currentBlock.getBlockWidth() > cols || checkCollision(currentBlock)) {
+            currentBlock.setX(currentBlock.getX() - 1); // undo if invalid
+        }
     }
 
     // stop block move
