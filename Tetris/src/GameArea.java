@@ -13,14 +13,22 @@ public class GameArea extends JPanel {
     int[][] board = new int[rows][cols];
     TetrisBlocks currentBlock = new TetrisBlocks();
 
+    Timer timer;
     public GameArea() {
-        Timer timer = new Timer(500, new ActionListener() {
+        timer = new Timer(500, new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 update();
                 repaint();
             }
         });
         timer.start();
+    }
+
+    private void gameOver() {
+        System.out.println("GAME OVER!");
+        timer.stop();
+
+        repaint();
     }
 
     private boolean isCollisionBelow(TetrisBlocks block) {
@@ -31,10 +39,8 @@ public class GameArea extends JPanel {
                     int nextRow = block.getY() + r + 1;
                     int col = block.getX() + c;
 
-                    // check floor
                     if (nextRow >= rows) return true;
 
-                    // check if the cell below is already occupied
                     if (board[nextRow][col] == 1) return true;
                 }
             }
@@ -42,27 +48,21 @@ public class GameArea extends JPanel {
         return false;
     }
 
+    private void spawnNewBlock() {
+        currentBlock = new TetrisBlocks();
+        if (checkCollision(currentBlock)) {
+            gameOver(); // trigger game over
+        }
+    }
+
     private void update() {
-        // calculate bottom of the block
-        int bottomY = currentBlock.getY() + currentBlock.getBlockHeight();
+        if (currentBlock == null) return; // stop updating if game over
 
-        // check if block can move down without hitting floor or another block
-        if (bottomY < rows && !isCollisionBelow(currentBlock)) {
-            currentBlock.setY(currentBlock.getY() + 1); // move down
+        if (currentBlock.getY() + currentBlock.getBlockHeight() < rows && !isCollisionBelow(currentBlock)) {
+            currentBlock.setY(currentBlock.getY() + 1);
         } else {
-            // this stops blocks
             lockBlock();
-
-            //spawns in new blcok
-            currentBlock = new TetrisBlocks();
-
-
-            if (checkCollision(currentBlock)) {
-                System.out.println("Game Over");
-
-            }
-
-            return;
+            spawnNewBlock();
         }
 
         // wall collision
