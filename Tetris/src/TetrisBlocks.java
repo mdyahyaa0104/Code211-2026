@@ -41,7 +41,7 @@ public class TetrisBlocks {
 
     private int[][][] shapesList = {O,I,S,Z,L,J,T};
     private int[][] currentShape;
-    private int x = 3, y = 0;
+    private int x = 1, y = 0;
 
     private Color color;
     private Color[] colors = {

@@ -7,6 +7,7 @@
     <list default="true" id="af0244ac-f0c3-4386-a865-06fe8a79278e" name="Changes" comment="bug fixes">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/GameArea.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/GameArea.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/TetrisBlocks.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/TetrisBlocks.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/TetrisPlayer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/TetrisPlayer.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -17,6 +18,18 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
   </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;mdyahyaa0104&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/mdyahyaa0104/Code211-2026.git&quot;,
+    &quot;accountId&quot;: &quot;2462a398-99f3-4987-940e-20ca034ddbd2&quot;
+  }
+}</component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 7,
   &quot;fromUser&quot;: false
@@ -99,7 +112,15 @@
       <option name="project" value="LOCAL" />
       <updated>1775334615941</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="bug fixes">
+      <option name="closed" value="true" />
+      <created>1775335487632</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1775335487632</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

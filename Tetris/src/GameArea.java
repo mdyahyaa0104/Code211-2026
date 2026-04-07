@@ -172,7 +172,7 @@ public class GameArea extends JPanel {
             }
         }
 
-        if(linesCleared % 10 == 0){
+        if((linesCleared + 1) % 10 == 0){
             level++;
             speed = Math.max(100, this.speed - 50);
             timer.setDelay(speed);
@@ -201,7 +201,12 @@ public class GameArea extends JPanel {
     private void spawnNewBlock() {
         currentBlock = new TetrisBlocks();
         if (checkCollision(currentBlock)) {
-            gameOver(); // trigger game over
+            if(isGameOver()){
+                lockBlock();
+            }
+        }
+        while(isOutOfBounds(currentBlock)){
+            currentBlock = new TetrisBlocks();
         }
     }
 
@@ -220,7 +225,19 @@ public class GameArea extends JPanel {
         return rotated;
     }
 
-    private boolean isOutOfBounds(TetrisBlocks block) {
+    public boolean isGameOver(){
+        try {
+            while (checkCollision(currentBlock)) {
+                currentBlock.setX(currentBlock.getX() + 1);
+            }
+        } catch(IndexOutOfBoundsException e){
+            gameOver();
+            return true;
+        }
+        return false;
+    }
+
+    public boolean isOutOfBounds(TetrisBlocks block) {
         int[][] shape = block.getCurrentShape();
 
         for (int r = 0; r < shape.length; r++) {
@@ -238,7 +255,7 @@ public class GameArea extends JPanel {
         return false;
     }
 
-    private boolean isCollisionBelow(TetrisBlocks block) {
+    public boolean isCollisionBelow(TetrisBlocks block) {
         int[][] shape = block.getCurrentShape();
         for (int r = 0; r < shape.length; r++) {
             for (int c = 0; c < shape[r].length; c++) {
@@ -256,7 +273,7 @@ public class GameArea extends JPanel {
     }
 
     // Block-to-Block Collision Check
-    private boolean checkCollision(TetrisBlocks block) {
+    public boolean checkCollision(TetrisBlocks block) {
         int[][] shape = block.getCurrentShape();
         for (int r = 0; r < shape.length; r++) {
             for (int c = 0; c < shape[r].length; c++) {
