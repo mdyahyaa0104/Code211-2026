@@ -12,13 +12,11 @@ public class GameArea extends JPanel {
     int speed = 500;
     private JLabel statusLabel; // store reference
 
-
     Color[][] board = new Color[rows][cols];
     TetrisBlocks currentBlock = new TetrisBlocks();
-
     Timer timer;
-    public GameArea(JLabel statusLabel) {
 
+    public GameArea(JLabel statusLabel) {
         this.statusLabel = statusLabel;
 
         timer = new Timer(speed, new ActionListener() {
@@ -27,6 +25,7 @@ public class GameArea extends JPanel {
                 repaint();
             }
         });
+
         timer.start();
 
         getInputMap(JPanel.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("LEFT"), "moveLeft");
@@ -79,7 +78,7 @@ public class GameArea extends JPanel {
 
                 currentBlock.setCurrentShape(rotated);
 
-                if (isOutOfBounds(currentBlock) || checkCollision(currentBlock)) {
+                if (isOutOfBounds(currentBlock) || isBlockCollision(currentBlock)) {
                     currentBlock.setCurrentShape(oldShape); // undo rotation
                 }
 
@@ -87,13 +86,13 @@ public class GameArea extends JPanel {
             }
         });
 
-        getInputMap(JPanel.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("T"), "changeTheme");
-        getActionMap().put("changeTheme", new AbstractAction() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-            }
-        });
+//        getInputMap(JPanel.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("T"), "changeTheme");
+//        getActionMap().put("changeTheme", new AbstractAction() {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//
+//            }
+//        });
     }
 
     private void update() {
@@ -118,14 +117,14 @@ public class GameArea extends JPanel {
 
     public void moveLeft() {
         currentBlock.setX(currentBlock.getX() - 1);
-        if (currentBlock.getX() < 0 || checkCollision(currentBlock)) {
+        if (currentBlock.getX() < 0 || isBlockCollision(currentBlock)) {
             currentBlock.setX(currentBlock.getX() + 1); // undo if invalid
         }
     }
 
     public void moveRight() {
         currentBlock.setX(currentBlock.getX() + 1);
-        if (currentBlock.getX() + currentBlock.getBlockWidth() > cols || checkCollision(currentBlock)) {
+        if (currentBlock.getX() + currentBlock.getBlockWidth() > cols || isBlockCollision(currentBlock)) {
             currentBlock.setX(currentBlock.getX() - 1); // undo if invalid
         }
     }
@@ -142,6 +141,20 @@ public class GameArea extends JPanel {
         getActionMap().clear();
         timer.stop();
         repaint();
+    }
+
+    int linesCleared = 0;
+
+    private void spawnNewBlock() {
+        currentBlock = new TetrisBlocks();
+        if (isBlockCollision(currentBlock)) {
+            if(isGameOver()){
+                lockBlock();
+            }
+        }
+        while(isOutOfBounds(currentBlock)){
+            currentBlock = new TetrisBlocks();
+        }
     }
 
     // stop block move
@@ -162,9 +175,6 @@ public class GameArea extends JPanel {
         clearLines();
         updateScore();
     }
-
-
-    int linesCleared = 0;
 
     public void clearLines() {
 
@@ -210,18 +220,6 @@ public class GameArea extends JPanel {
         }
     }
 
-    private void spawnNewBlock() {
-        currentBlock = new TetrisBlocks();
-        if (checkCollision(currentBlock)) {
-            if(isGameOver()){
-                lockBlock();
-            }
-        }
-        while(isOutOfBounds(currentBlock)){
-            currentBlock = new TetrisBlocks();
-        }
-    }
-
 
     public int[][] rotateClockwise(int[][] matrix) {
         int rows = matrix.length;
@@ -239,7 +237,7 @@ public class GameArea extends JPanel {
 
     public boolean isGameOver(){
         try {
-            while (checkCollision(currentBlock)) {
+            while (isBlockCollision(currentBlock)) {
                 currentBlock.setX(currentBlock.getX() + 1);
             }
         } catch(IndexOutOfBoundsException e){
@@ -285,7 +283,7 @@ public class GameArea extends JPanel {
     }
 
     // Block-to-Block Collision Check
-    public boolean checkCollision(TetrisBlocks block) {
+    public boolean isBlockCollision(TetrisBlocks block) {
         int[][] shape = block.getCurrentShape();
         for (int r = 0; r < shape.length; r++) {
             for (int c = 0; c < shape[r].length; c++) {
