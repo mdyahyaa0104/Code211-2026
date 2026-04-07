@@ -45,13 +45,13 @@ public class TetrisBlocks {
 
     private Color color;
     private Color[] colors = {
-            color.GREEN,
-            color.RED,
-            color.YELLOW,
-            color.ORANGE,
-            color.BLUE,
-            color.PINK,
-            color.MAGENTA
+            new Color(0, 255, 255),   // I - cyan
+            new Color(255, 255, 0),   // O - yellow
+            new Color(128, 0, 128),   // T - purple
+            new Color(0, 255, 0),     // S - green
+            new Color(255, 0, 0),     // Z - red
+            new Color(0, 0, 255),     // J - blue
+            new Color(255, 165, 0)    // L - orange
     };
 
     public TetrisBlocks(){

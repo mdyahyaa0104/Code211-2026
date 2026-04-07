@@ -86,6 +86,14 @@ public class GameArea extends JPanel {
                 repaint();
             }
         });
+
+        getInputMap(JPanel.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("T"), "changeTheme");
+        getActionMap().put("changeTheme", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
     }
 
     private void update() {
@@ -293,12 +301,9 @@ public class GameArea extends JPanel {
         return false;
     }
 
-    @Override
-    protected void paintComponent(Graphics g) {
+    public void paintComponent(Graphics g) {
         super.paintComponent(g);
 
-        // draw grid
-        g.setColor(Color.DARK_GRAY);
         for (int r = 0; r <= rows; r++) {
             g.drawLine(0, r * cellSize, cols * cellSize, r * cellSize);
         }
@@ -323,7 +328,19 @@ public class GameArea extends JPanel {
                 if (shape[r][c] == 1) {
                     int x = (currentBlock.getX() + c) * cellSize;
                     int y = (currentBlock.getY() + r) * cellSize;
+                    Color base = currentBlock.getColor();
+
+                    // fill
+                    g.setColor(base);
                     g.fillRect(x, y, cellSize, cellSize);
+
+                    // highlight (top/left) shadow (bottom/right)
+                    g.setColor(base.brighter());
+                    g.drawLine(x, y, x + cellSize - 1, y);
+                    g.drawLine(x, y, x, y + cellSize - 1);
+                    g.setColor(base.darker());
+                    g.drawLine(x, y + cellSize - 1, x + cellSize - 1, y + cellSize - 1);
+                    g.drawLine(x + cellSize - 1, y, x + cellSize - 1, y + cellSize - 1);
                 }
             }
         }
