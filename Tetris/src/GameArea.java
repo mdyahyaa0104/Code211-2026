@@ -10,14 +10,20 @@ public class GameArea extends JPanel {
     int rows = 20, cols = 10, cellSize = 30;
     int points = 10, level = 1;
     int speed = 500;
+    Color backgroundColor, gridColor;
+    Color[] themeBlockColors;
+    String theme = "light";
     private JLabel statusLabel; // store reference
 
     Color[][] board = new Color[rows][cols];
-    TetrisBlocks currentBlock = new TetrisBlocks();
+    TetrisBlocks currentBlock;
     Timer timer;
 
     public GameArea(JLabel statusLabel) {
         this.statusLabel = statusLabel;
+
+        changeTheme(theme);
+        currentBlock = new TetrisBlocks(themeBlockColors);
 
         timer = new Timer(speed, new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -86,16 +92,22 @@ public class GameArea extends JPanel {
             }
         });
 
-//        getInputMap(JPanel.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("T"), "changeTheme");
-//        getActionMap().put("changeTheme", new AbstractAction() {
-//            @Override
-//            public void actionPerformed(ActionEvent e) {
-//
-//            }
-//        });
+        getInputMap(JPanel.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("T"), "changeTheme");
+        getActionMap().put("changeTheme", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(theme.equals("light")){
+                    changeTheme("dark");
+                }
+                else if(theme.equals("dark")){
+                    changeTheme("light");
+                }
+                repaint();
+            }
+        });
     }
 
-    private void update() {
+    public void update() {
         if (currentBlock == null) return; // stop updating if game over
 
         if (currentBlock.getY() + currentBlock.getBlockHeight() < rows && !isCollisionBelow(currentBlock)) {
@@ -129,12 +141,12 @@ public class GameArea extends JPanel {
         }
     }
 
-    private void updateScore() {
+    public void updateScore() {
         points += ((linesCleared * level) * 100);
         statusLabel.setText("Points: " + points + " | Level: " + level);
     }
 
-    private void gameOver() {
+    public void gameOver() {
         System.out.println("GAME OVER!");
 
         getInputMap(JPanel.WHEN_IN_FOCUSED_WINDOW).clear();
@@ -145,20 +157,20 @@ public class GameArea extends JPanel {
 
     int linesCleared = 0;
 
-    private void spawnNewBlock() {
-        currentBlock = new TetrisBlocks();
+    public void spawnNewBlock() {
+        currentBlock = new TetrisBlocks(themeBlockColors);
         if (isBlockCollision(currentBlock)) {
             if(isGameOver()){
                 lockBlock();
             }
         }
         while(isOutOfBounds(currentBlock)){
-            currentBlock = new TetrisBlocks();
+            currentBlock = new TetrisBlocks(themeBlockColors);
         }
     }
 
     // stop block move
-    private void lockBlock() {
+    public void lockBlock() {
         int[][] shape = currentBlock.getCurrentShape();
 
         for (int r = 0; r < shape.length; r++) {
@@ -299,9 +311,46 @@ public class GameArea extends JPanel {
         return false;
     }
 
-    public void paintComponent(Graphics g) {
-        super.paintComponent(g);
+    public void changeTheme(String theme) {
+        if (theme.equals("dark")) {
+            backgroundColor = new Color(18, 18, 18);
+            gridColor = new Color(255, 255, 255, 40);
 
+            themeBlockColors = new Color[]{
+                    new Color(0, 255, 255),
+                    new Color(255, 255, 0),
+                    new Color(128, 0, 128),
+                    new Color(0, 255, 0),
+                    new Color(255, 0, 0),
+                    new Color(0, 0, 255),
+                    new Color(255, 165, 0)
+            };
+
+        } else if (theme.equals("light")) {
+            backgroundColor = Color.WHITE;
+            gridColor = new Color(200, 200, 200);
+
+
+            themeBlockColors = new Color[]{
+                    Color.CYAN,
+                    Color.YELLOW,
+                    Color.MAGENTA,
+                    Color.GREEN,
+                    Color.RED,
+                    Color.BLUE,
+                    Color.ORANGE
+            };
+        }
+
+        this.theme = theme;
+        repaint();
+    }
+
+    public void paintComponent(Graphics g) {
+        g.setColor(backgroundColor);
+        g.fillRect(0, 0, getWidth(), getHeight());
+
+        g.setColor(gridColor);
         for (int r = 0; r <= rows; r++) {
             g.drawLine(0, r * cellSize, cols * cellSize, r * cellSize);
         }
@@ -313,6 +362,7 @@ public class GameArea extends JPanel {
         for (int r = 0; r < rows; r++) {
             for (int c = 0; c < cols; c++) {
                 if (board[r][c] != null) {
+                    g.setColor(board[r][c]);
                     g.fillRect(c * cellSize, r * cellSize, cellSize, cellSize);
                 }
             }

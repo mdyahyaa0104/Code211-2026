@@ -54,12 +54,12 @@ public class TetrisBlocks {
             new Color(255, 165, 0)    // L - orange
     };
 
-    public TetrisBlocks(){
+    public TetrisBlocks(Color[] themeColors){
         Random rand = new Random();
         int randIndex = rand.nextInt(7);
         currentShape = shapesList[randIndex];
 
-        color = colors[randIndex];
+        color = themeColors[randIndex];
     }
 
     public int[][] getCurrentShape() {
