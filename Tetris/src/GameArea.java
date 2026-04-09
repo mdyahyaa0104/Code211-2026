@@ -16,7 +16,7 @@ public class GameArea extends JPanel {
     private JLabel statusLabel; // store reference
 
     Color[][] board = new Color[rows][cols];
-    TetrisBlocks currentBlock;
+    TetrisBlocks currentBlock, nextBlock;
     Timer timer;
 
     public GameArea(JLabel statusLabel) {
@@ -24,6 +24,7 @@ public class GameArea extends JPanel {
 
         changeTheme(theme);
         currentBlock = new TetrisBlocks(themeBlockColors);
+        nextBlock = new TetrisBlocks(themeBlockColors);
 
         timer = new Timer(speed, new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -158,7 +159,9 @@ public class GameArea extends JPanel {
     int linesCleared = 0;
 
     public void spawnNewBlock() {
-        currentBlock = new TetrisBlocks(themeBlockColors);
+        currentBlock = nextBlock;
+        nextBlock = new TetrisBlocks(themeBlockColors);
+
         if (isBlockCollision(currentBlock)) {
             if(isGameOver()){
                 lockBlock();
@@ -374,6 +377,29 @@ public class GameArea extends JPanel {
         return ghostY;
     }
 
+    private void drawNextBlock(Graphics g) {
+        int startX = cols * cellSize + 30; // right side
+        int startY = 50;
+
+        int[][] shape = nextBlock.getCurrentShape();
+
+        g.setColor(Color.WHITE);
+        g.drawString("Next:", startX, startY - 10);
+
+        g.setColor(nextBlock.getColor());
+
+        for (int r = 0; r < shape.length; r++) {
+            for (int c = 0; c < shape[r].length; c++) {
+                if (shape[r][c] == 1) {
+                    int x = startX + c * cellSize;
+                    int y = startY + r * cellSize;
+
+                    g.fillRect(x, y, cellSize, cellSize);
+                }
+            }
+        }
+    }
+
     public void paintComponent(Graphics g) {
         g.setColor(backgroundColor);
         g.fillRect(0, 0, getWidth(), getHeight());
@@ -442,5 +468,6 @@ public class GameArea extends JPanel {
                 }
             }
         }
+        drawNextBlock(g);
     }
 }
