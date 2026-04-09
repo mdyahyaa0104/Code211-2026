@@ -346,6 +346,34 @@ public class GameArea extends JPanel {
         repaint();
     }
 
+    private int getGhostY() {
+        int ghostY = currentBlock.getY();
+
+        while (true) {
+            boolean collision = false;
+
+            int[][] shape = currentBlock.getCurrentShape();
+
+            for (int r = 0; r < shape.length; r++) {
+                for (int c = 0; c < shape[r].length; c++) {
+                    if (shape[r][c] == 1) {
+                        int nextRow = ghostY + r + 1;
+                        int col = currentBlock.getX() + c;
+
+                        if (nextRow >= rows || board[nextRow][col] != null) {
+                            collision = true;
+                        }
+                    }
+                }
+            }
+
+            if (collision) break;
+            ghostY++;
+        }
+
+        return ghostY;
+    }
+
     public void paintComponent(Graphics g) {
         g.setColor(backgroundColor);
         g.fillRect(0, 0, getWidth(), getHeight());
@@ -368,8 +396,30 @@ public class GameArea extends JPanel {
             }
         }
 
-        // draw current falling block
+        int ghostY = getGhostY();
         int[][] shape = currentBlock.getCurrentShape();
+
+        Color ghostColor = new Color(
+                currentBlock.getColor().getRed(),
+                currentBlock.getColor().getGreen(),
+                currentBlock.getColor().getBlue(),
+                80 // transparency
+        );
+
+        g.setColor(ghostColor);
+
+        for (int r = 0; r < shape.length; r++) {
+            for (int c = 0; c < shape[r].length; c++) {
+                if (shape[r][c] == 1) {
+                    int x = (currentBlock.getX() + c) * cellSize;
+                    int y = (ghostY + r) * cellSize;
+
+                    g.fillRect(x, y, cellSize, cellSize);
+                }
+            }
+        }
+
+        // draw current falling block
         g.setColor(currentBlock.getColor());
         for (int r = 0; r < shape.length; r++) {
             for (int c = 0; c < shape[r].length; c++) {
