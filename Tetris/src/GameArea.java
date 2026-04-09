@@ -346,7 +346,7 @@ public class GameArea extends JPanel {
         repaint();
     }
 
-    private int getGhostY() {
+    public int getGhostY() {
         int ghostY = currentBlock.getY();
 
         while (true) {
