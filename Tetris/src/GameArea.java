@@ -142,7 +142,7 @@ public class GameArea extends JPanel {
     }
 
     public void updateScore() {
-        points += ((linesCleared * level) * 100);
+        points += (linesCleared * level);
         statusLabel.setText("Points: " + points + " | Level: " + level);
     }
 

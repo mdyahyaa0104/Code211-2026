@@ -56,7 +56,7 @@ public class TetrisBlocks {
 
     public TetrisBlocks(Color[] themeColors){
         Random rand = new Random();
-        int randIndex = rand.nextInt(7);
+        int randIndex = rand.nextInt(shapesList.length);
         currentShape = shapesList[randIndex];
 
         color = themeColors[randIndex];
